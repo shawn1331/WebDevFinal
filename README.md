@@ -84,9 +84,5 @@ This project interests me because it combines **game logic**, **UI design**, and
 - [ ] *A developer can record and submit a short demo video showing gameplay and hosted API.*
 ---
 
-## Repository
-**GitHub Repo:** [https://github.com/yourusername/connect4-finalproject](https://github.com/yourusername/connect4-finalproject)  
----
-
 ## Summary
 By following this week-by-week checklist, I’ll deliver a professional-grade Connect 4 game that demonstrates mastery of **front-end design**, **JavaScript logic**, and **C# API development** — fully aligned with the final-project requirements.
