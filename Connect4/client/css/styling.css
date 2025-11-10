@@ -1,0 +1,87 @@
+:root {
+  --background-color: rgb(103, 103, 103);
+  --font-color: rgb(198, 198, 198);
+  --button-color: ;
+  --button-font-color: ;
+  --link-color:rgb(135, 228, 235);
+  --link-color-hover: orange;
+  --link-color-visited: rgb(0, 4, 134);
+  --margin: 10px;
+  --padding: 10px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#navigation {
+  display: flex;
+  gap: 1em;
+  background-color: var();
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 5px;
+  padding: 5px;
+  width: auto;
+  height: 6em;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+#navigation a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-size: 22px;
+}
+
+#navigation a:hover {
+  color: var(--link-color-hover);
+}
+
+#navigation a:visited {
+  color: var(--link-color-visited);
+}
+
+#footer {
+  text-align: center;
+  /* margin: var(--margin);
+  padding: var(--padding); */
+  align-items: flex-end;
+  width: auto;
+  height: 5em;
+  font-size:18px ;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: space-between;
+    gap: 2em;
+    overflow-y: auto;
+}
+
+#available-rooms{
+    margin: var(--margin);
+    padding: var(--padding);
+    width: 50%;
+}
+
+#create-game{
+    margin: var(--margin);
+    padding: var(--padding);
+    width:50%;
+
+}
+
+hr{
+    padding:0;
+    margin:0;
+}

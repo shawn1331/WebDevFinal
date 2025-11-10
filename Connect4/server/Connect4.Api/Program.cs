@@ -1,3 +1,4 @@
+using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 var app = builder.Build();
