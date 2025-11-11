@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Connect4.Logic;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 var app = builder.Build();

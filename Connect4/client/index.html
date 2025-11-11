@@ -9,7 +9,7 @@
   </head>
   <body>
     <header id="navigation-container">
-      <h1>Connect-4 Lobby</h1>
+      <h1>Connect-4: Lobby</h1>
       <nav id="navigation">
         <a href="index.html">Lobby</a>
         <a href="play.html">Play</a>
@@ -30,6 +30,9 @@
               minlength="1"
               maxlength="20"
             />
+            <label for="ranked">Ranked</label>
+            <input type="radio" id="ranked" name="ranked" value="ranked">
+            <button type="submit" >Create Game</button>
         </form>
       </section>
       <hr>
@@ -39,7 +42,7 @@
             <!-- Available rooms will be dynamically added here -->
         </ul>
       </section>
-    </main>
+      </main>
     <footer id="footer"> <hr>
       <p>&copy; 2025 Connect-4 Project</p>
     </footer>

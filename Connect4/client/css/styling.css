@@ -3,9 +3,9 @@
   --font-color: rgb(198, 198, 198);
   --button-color: ;
   --button-font-color: ;
-  --link-color:rgb(135, 228, 235);
+  --link-color: rgb(135, 228, 235);
   --link-color-hover: orange;
-  --link-color-visited: rgb(0, 4, 134);
+  --link-color-visited: black; /*rgb(0, 4, 134)*/
   --margin: 10px;
   --padding: 10px;
 }
@@ -32,7 +32,8 @@ body {
   height: 6em;
 }
 
-h1, h2 {
+h1,
+h2 {
   text-align: center;
 }
 
@@ -52,36 +53,42 @@ h1, h2 {
 
 #footer {
   text-align: center;
-  /* margin: var(--margin);
-  padding: var(--padding); */
   align-items: flex-end;
   width: auto;
   height: 5em;
-  font-size:18px ;
+  font-size: 18px;
 }
 
 #main-container {
-    display: flex;
-    flex-direction: row;
-    align-items: space-between;
-    gap: 2em;
-    overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  gap: 2em;
+  overflow-y: auto;
 }
 
-#available-rooms{
-    margin: var(--margin);
-    padding: var(--padding);
-    width: 50%;
+#available-rooms {
+  margin: var(--margin);
+  padding: var(--padding);
+  width: 50%;
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+#create-game,
+#create-game form {
+  margin: var(--margin);
+  padding: var(--padding);
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  height: auto;
 }
 
-#create-game{
-    margin: var(--margin);
-    padding: var(--padding);
-    width:50%;
-
+hr {
+  padding: 0;
+  margin: 0;                                                                                                                         
 }
 
-hr{
-    padding:0;
-    margin:0;
+input[type="radio"] {
+    
 }

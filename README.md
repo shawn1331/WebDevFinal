@@ -41,47 +41,69 @@ This project interests me because it combines **game logic**, **UI design**, and
 
 ## 🗓️ Project Schedule & User-Story Tasks
 
-### **Nov 08 (10%)**
-- [ ] *A user can see a shared header, nav, and footer across all pages.*
-- [ ] *A user can navigate between pages for Lobby, Play, and Profile.*
-- [ ] *A developer can initialize the GitHub repo and connect it to the hosted API folder structure.*
-- [ ] *A developer can link CSS and JS module files properly in each HTML page.*
+# 🎮 Connect 4 Final Project — Accelerated Task Plan (Server-Authoritative Architecture)
 
-### **Nov 12 (30%)**
-- [ ] *A user can view the Connect 4 board layout built with CSS Grid and Flexbox.*
-- [ ] *A user can see hover and transition effects when interacting with buttons or board cells.*
-- [ ] *A developer can use CSS variables for background, text, and accent colors that meet accessibility contrast guidelines.*
-- [ ] *A developer can verify that forms (text, number, select, reset, submit) exist on the lobby and profile pages.*
+## ✅ Completed — Nov 08 (10%) & Nov 12 (30%)
+- [x] *A developer can open the ConnectFour solution and see linked projects (Api, Core, Tests).*
+- [x] *A developer can run the API locally and view Swagger or a Hello World endpoint.*
+- [x] *A developer can confirm Core is referenced correctly and compiles.*
+- [x] *A user can navigate between index.html, play.html, and profile.html using a shared header and footer.*
+- [x] *A user can view the finished CSS layout with variables, hover states, grid/flexbox, and accessible colors.*
+- [x] *A developer has documented API endpoint contracts and Core folder structure in the README.*
 
-### **Nov 15 (40%)**
-- [ ] *A user can drop a chip locally and see it appear on the board (DOM manipulation).*
-- [ ] *A user can experience working drag-and-drop for chips onto board columns.*
-- [ ] *A developer can use JavaScript map and filter to process board state and move logs.*
-- [ ] *A developer can organize code into ui/domain/svc modules with imports / exports.*
+---
 
-### **Nov 19 (50%)**
-- [ ] *A user can create a new game lobby through a form and see it appear in the list.*
-- [ ] *A user can join an existing room from the lobby filter list.*
-- [ ] *A developer can connect the frontend to the C# Minimal API using async/await fetch calls.*
-- [ ] *A developer can store and retrieve data (rooms, moves, state) in local storage during play.*
+## Nov 15 (50%) — Core Game Engine Foundations
+- [ ] *A developer can implement the Core domain models (`Board`, `Game`, `Player`, `Cell`, `WinLine`).*
+- [ ] *A developer can implement the `GameService` structure with `CreateGame`, `JoinGame`, `ApplyMove`, and `GetState` methods.*
+- [ ] *A developer can write the gravity logic that finds the lowest empty row in a column.*
+- [ ] *A developer can write the `WinChecker` to detect horizontal, vertical, and both diagonal four-in-a-row sequences.*
+- [ ] *A developer can verify these Core methods with xUnit tests for gravity, invalid moves, and basic win cases.*
+- [ ] *A developer can confirm all tests pass using `dotnet test`.*
 
-### **Nov 22 (70%)**
-- [ ] *A user can filter game rooms by size, ranked/casual, or host name (filter bar + map/filter logic).*
-- [ ] *A user can see random opponent avatars fetched from the external API (RandomUser.me).*
-- [ ] *A user can reload the page and keep their name, color theme, and preferences via local storage.*
-- [ ] *A developer can read querystring parameters (e.g., ?gameId=123) to join a specific game.*
+---
 
-### **Nov 25 (80%)**
-- [ ] *A user can play a full online match with moves saved on the hosted C# API.*
-- [ ] *A user can view a simple leaderboard and personal stats on the Profile page.*
-- [ ] *A developer can host the C# API on a cloud service (Render / Railway / Azure).*
-- [ ] *A developer can ensure responsive design and accessible color contrast on all devices.*
+## Nov 19 (65%) — API Integration & Validation
+- [ ] *A developer can connect API endpoints (`/rooms`, `/join`, `/state`, `/move`) to Core’s GameService.*
+- [ ] *A developer can add per-game locking in API to prevent double moves.*
+- [ ] *A developer can implement token-based player validation (hostToken, guestToken).*
+- [ ] *A developer can test endpoints in Swagger/Postman to confirm valid and invalid move responses.*
+- [ ] *A user can play a test game entirely through the API using JSON calls.*
 
-### **Dec 03 (90%)**
-- [ ] *A user can see the final polished UI with all rubric features completed.*
-- [ ] *A user can watch an alert or animation announcing the winner at the end of a match.*
-- [ ] *A developer can verify all rubric items (HTML, CSS, JS, Functional, Server) are implemented.*
-- [ ] *A developer can record and submit a short demo video showing gameplay and hosted API.*
+---
+
+## Nov 22 (75%) — Front-End Connection to API
+- [ ] *A user can create and join games from the front-end lobby using real API calls.*
+- [ ] *A user can drag a chip and see it reflected in both browsers via API state.*
+- [ ] *A user can filter game rooms by size, ranked/casual, or host name using a filter bar.*
+- [ ] *A user can see random opponent avatars fetched from RandomUser.me.*
+- [ ] *A developer can handle all async/await calls in JS through a clean `service.js` layer.*
+
+---
+
+## Nov 25 (85%) — Deployment & Persistence
+- [ ] *A developer can deploy the API to a cloud service (Render, Railway, or Azure).*
+- [ ] *A user can join a game using a shared URL with `?gameId` and `token` query parameters.*
+- [ ] *A developer can add simple persistence (JSON file or SQLite) to save finished games.*
+- [ ] *A user can view a profile page showing total wins/losses retrieved from the API.*
+- [ ] *A developer can ensure the site is responsive and accessible on mobile.*
+
+---
+
+## Dec 03 (95%) — Game Polish & Error Handling
+- [ ] *A user can see an end-game message or animation showing the winner or draw.*
+- [ ] *A user can start a new game from the play page after a match ends.*
+- [ ] *A developer can add friendly error messages for invalid moves or lost connections.*
+- [ ] *A developer can verify keyboard accessibility for column selection and dropping chips.*
+- [ ] *A developer can finalize README mapping every rubric requirement to file locations.*
+
+---
+
+## Dec 10 (100%) — Submission & Demo
+- [ ] *A user can watch a short demo video showing lobby creation, gameplay, and results.*
+- [ ] *A developer can push final code to GitHub and confirm `alexmickelson` is added as collaborator.*
+- [ ] *A developer can update the README with final deployment URLs and confirm all rubric boxes are checked.*
+
 ---
 
 ## Summary
