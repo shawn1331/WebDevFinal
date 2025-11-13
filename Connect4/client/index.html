@@ -31,7 +31,7 @@
               maxlength="20"
             />
             <label for="ranked">Ranked</label>
-            <input type="radio" id="ranked" name="ranked" value="ranked">
+            <input type="radio" id="ranked" name="ranked" value="">
             <button type="submit" >Create Game</button>
         </form>
       </section>
@@ -41,6 +41,14 @@
         <ul id="available-room-list">
             <!-- Available rooms will be dynamically added here -->
         </ul>
+      </section>
+      <section id="filter-bar">
+        <h2>Filter Rooms</h2>
+        <form action="" id="filter-form">
+            <label for="filter-name">Filter By Game Name</label>
+            <input type="text" id="filter-name" name="filter-name" placeholder="Enter Game Name">
+            <button type="submit" id="filter-submit"></button>
+        </form>
       </section>
       </main>
     <footer id="footer"> <hr>
