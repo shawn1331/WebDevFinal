@@ -2,8 +2,8 @@ namespace Connect4.Logic.Domain;
 public class Board
 {
     private readonly int[,] _grid;
-    private int Rows { get; }
-    private int Columns { get; }
+    public int Rows { get; private set;}
+    public int Columns { get; private set;}
 
     public Board(int cols, int rows)
     {
