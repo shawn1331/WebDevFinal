@@ -1,31 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/styling.css" />
-    <script type="module" src=""></script>
-    <title></title>
-  </head>
-  <body>
-    <header id="navigation-container">
-      <h1>Connect-4: Game</h1>
-      <nav id="navigation">
-        <a href="index.html">Lobby</a>
-        <a href="play.html">Play</a>
-        <a href="profile.html">Profile</a>
-      </nav>
-      <hr />
-    </header>
-    <main id="main-container">
-        <aside id="pieces-container">
-            </aside>
-      <section id="board-container">
-        </section>
-    </main>
-    <footer id="footer">
-      <hr />
-      <p>&copy; 2025 Connect-4 Project</p>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-    </footer>
-  </body>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Connect 4 – Play</title>
+  <link rel="stylesheet" href="./css/styling.css"/>
+  <script type="module" src="./js/ui/shared.js"></script>
+  <script type="module" src="./js/ui/play.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="container game">
+  <aside class="panel tray">
+    <h3>Opponent</h3>
+    <figure>
+      <img id="avatar" alt="opponent avatar"/>
+      <figcaption id="avatar-cap">Loading…</figcaption>
+    </figure>
+    <div id="game-info"></div>
+    <button id="refresh">Refresh</button>
+  </aside>
+
+  <section class="panel board-wrap">
+    <h2 id="status">Your turn?</h2>
+    <div id="board" class="board" aria-label="Connect 4 board"></div>
+    <ul id="moves" class="moves"></ul>
+  </section>
+</main>
+<footer id="site-footer"></footer>
+</body>
 </html>

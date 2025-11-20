@@ -8,87 +8,154 @@
   --link-color-visited: black; /*rgb(0, 4, 134)*/
   --margin: 10px;
   --padding: 10px;
+  --bg: #0e141b;
+  --text: #e6eef6;
+  --muted: #9fb3c8;
+  --accent: #33b1ff;
+  --p1: #ff4141;
+  --p2: #ffd23f;
+  --win: #20c997;
 }
 
+* {
+  box-sizing: border-box;
+}
+html,
 body {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--background-color);
+  margin: 0;
+  background: var(--background-color);
   color: var(--font-color);
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
 }
-
-#navigation {
+header,
+footer {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #1b2733;
+}
+footer {
+  border-top: 1px solid #1b2733;
+  border-bottom: none;
+}
+.nav {
   display: flex;
-  gap: 1em;
-  background-color: var();
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 5px;
-  padding: 5px;
-  width: auto;
-  height: 6em;
+  gap: 0.75rem;
 }
-
-h1,
-h2 {
-  text-align: center;
-}
-
-#navigation a {
+.nav a {
   color: var(--link-color);
   text-decoration: none;
-  font-size: 22px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
 }
-
-#navigation a:hover {
+.nav a:hover {
   color: var(--link-color-hover);
+  background: #131c25;
+  transition: background 0.2s;
 }
-
-#navigation a:visited {
+.nav a:visited {
   color: var(--link-color-visited);
 }
 
-#footer {
-  text-align: center;
-  align-items: flex-end;
-  width: auto;
-  height: 5em;
-  font-size: 18px;
+.container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 320px 1fr;
+  max-width: 1200px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+.container.game {
+  align-items: start;
+}
+.panel {
+  background: #0b1015;
+  border: 1px solid #1b2733;
+  border-radius: 12px;
+  padding: 1rem;
 }
 
-#main-container {
-  display: flex;
-  flex-direction: row;
-  align-items: space-between;
-  gap: 2em;
-  overflow-y: auto;
+.board {
+  --cols: 7;
+  --rows: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 56px);
+  grid-auto-rows: 56px;
+  gap: 8px;
+  align-content: start;
+  justify-content: center;
+  padding: 1rem;
+  background: #0a2a43;
+  border-radius: 16px;
 }
-
-#available-rooms {
-  margin: var(--margin);
-  padding: var(--padding);
-  width: 50%;
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-
-#create-game,
-#create-game form {
-  margin: var(--margin);
-  padding: var(--padding);
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  height: auto;
+.cell {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #0e141b;
+  border: 2px solid #16364f;
+  display: grid;
+  place-items: center;
+  transition: transform 0.12s;
+  cursor: pointer;
 }
-
-hr {
+.cell:hover {
+  transform: translateY(-2px);
+}
+.cell.is-p1 {
+  background: var(--p1);
+}
+.cell.is-p2 {
+  background: var(--p2);
+}
+.cell.is-win {
+  outline: 3px solid var(--win);
+}
+.moves {
+  list-style: none;
+  margin: 0;
   padding: 0;
-  margin: 0;                                                                                                                         
 }
-
-input[type="radio"] {
-    
+.moves li {
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid #1b2733;
+  color: var(--muted);
+}
+.moves li:nth-child(odd) {
+  background: #0f1620;
+}
+form {
+  display: grid;
+  gap: 0.5rem;
+}
+label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+input,
+select,
+button {
+  background: #111925;
+  color: var(--text);
+  border: 1px solid #223449;
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+}
+button:hover {
+  background: #152135;
+  transition: background 0.2s;
+}
+.rooms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.rooms li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #1b2733;
+}
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
 }

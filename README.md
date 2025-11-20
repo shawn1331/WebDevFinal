@@ -54,22 +54,22 @@ This project interests me because it combines **game logic**, **UI design**, and
 ---
 
 ## Nov 15 (50%) — Core Game Engine Foundations
-- [ ] *A developer can implement the Core domain models (`Board`, `Game`, `Player`, `Cell`, `WinLine`).*
-- [ ] *A developer can implement the `GameService` structure with `CreateGame`, `JoinGame`, `ApplyMove`, and `GetState` methods.*
-- [ ] *A developer can write the gravity logic that finds the lowest empty row in a column.*
-- [ ] *A developer can write the `WinChecker` to detect horizontal, vertical, and both diagonal four-in-a-row sequences.*
-- [ ] *A developer can verify these Core methods with xUnit tests for gravity, invalid moves, and basic win cases.*
-- [ ] *A developer can confirm all tests pass using `dotnet test`.*
+- [X] *A developer can implement the Core domain models (`Board`, `Game`, `Player`, `Cell`, `WinLine`).*
+- [X] *A developer can implement the `GameService` structure with `CreateGame`, `JoinGame`, `ApplyMove`, and `GetState` methods.*
+- [X] *A developer can write the gravity logic that finds the lowest empty row in a column.*
+- [X] *A developer can write the `WinChecker` to detect horizontal, vertical, and both diagonal four-in-a-row sequences.*
+- [X] *A developer can verify these Core methods with xUnit tests for gravity, invalid moves, and basic win cases.*
+- [X] *A developer can confirm all tests pass using `dotnet test`.*
 
 ---
 
 ## Nov 19 (65%) — API Integration & Validation
-- [ ] *A developer can connect API endpoints (`/rooms`, `/join`, `/state`, `/move`) to Core’s GameService.*
-- [ ] *A developer can add per-game locking in API to prevent double moves.*
-- [ ] *A developer can implement token-based player validation (hostToken, guestToken).*
-- [ ] *A developer can test endpoints in Swagger/Postman to confirm valid and invalid move responses.*
-- [ ] *A user can play a test game entirely through the API using JSON calls.*
-
+- [X] *A developer can connect API endpoints (`/rooms`, `/join`, `/state`, `/move`) to Core’s GameService.*
+- [X] *A developer can add per-game locking in API to prevent double moves.*
+- [X] *A developer can implement token-based player validation (hostToken, guestToken).*
+- [X] *A developer can test endpoints in Swagger/Postman to confirm valid and invalid move responses.*
+- [X] *A user can play a test game entirely through the API using JSON calls.*
+ 
 ---
 
 ## Nov 22 (75%) — Front-End Connection to API
@@ -104,7 +104,7 @@ This project interests me because it combines **game logic**, **UI design**, and
 - [ ] *A developer can push final code to GitHub and confirm `alexmickelson` is added as collaborator.*
 - [ ] *A developer can update the README with final deployment URLs and confirm all rubric boxes are checked.*
 
----
+---                                                  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm,mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
 ## Summary
 By following this week-by-week checklist, I’ll deliver a professional-grade Connect 4 game that demonstrates mastery of **front-end design**, **JavaScript logic**, and **C# API development** — fully aligned with the final-project requirements.

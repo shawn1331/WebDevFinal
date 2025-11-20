@@ -1,58 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/styling.css" />
-    <script type="module" src=""></script>
-    <title>Connect-4: Create A Game</title>
-  </head>
-  <body>
-    <header id="navigation-container">
-      <h1>Connect-4: Lobby</h1>
-      <nav id="navigation">
-        <a href="index.html">Lobby</a>
-        <a href="play.html">Play</a>
-        <a href="profile.html">Profile</a>
-      </nav> <hr>
-    </header>
-    <main id="main-container">
-      <section id="create-game">
-        <h2>Create Game</h2>
-        <form action="" id="create-game-form">
-          <label for="room-name" id="room-name-label">Room Name:</label>
-            <input
-              type="text"
-              id="room-name"
-              name="room-name"
-              placeholder="Enter Room Name"
-              required
-              minlength="1"
-              maxlength="20"
-            />
-            <label for="ranked">Ranked</label>
-            <input type="radio" id="ranked" name="ranked" value="">
-            <button type="submit" >Create Game</button>
-        </form>
-      </section>
-      <hr>
-      <section id="available-rooms">
-        <h2>Available Rooms</h2>
-        <ul id="available-room-list">
-            <!-- Available rooms will be dynamically added here -->
-        </ul>
-      </section>
-      <section id="filter-bar">
-        <h2>Filter Rooms</h2>
-        <form action="" id="filter-form">
-            <label for="filter-name">Filter By Game Name</label>
-            <input type="text" id="filter-name" name="filter-name" placeholder="Enter Game Name">
-            <button type="submit" id="filter-submit"></button>
-        </form>
-      </section>
-      </main>
-    <footer id="footer"> <hr>
-      <p>&copy; 2025 Connect-4 Project</p>
-    </footer>
-  </body>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Connect 4 – Lobby</title>
+  <link rel="stylesheet" href="./css/styling.css"/>
+  <script type="module" src="./js/ui/shared.js"></script>
+  <script type="module" src="./js/ui/lobby.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="container">
+  <section class="panel">
+    <h2>Create Game</h2>
+    <form id="create-form">
+      <label>Display Name <input type="text" name="hostName" required></label>
+      <label>Room Name <input type="text" name="roomName" required></label>
+      <label>Board Size
+        <select name="size">
+          <option value="7x6">7 x 6</option>
+          <option value="8x7">8 x 7</option>
+        </select>
+      </label>
+      <label>Timer (sec) <input type="number" name="timerSec" value="0" min="0" max="60"></label>
+      <label>Mode
+        <select name="ranked">
+          <option value="false">Casual</option>
+          <option value="true">Ranked</option>
+        </select>
+      </label>
+      <div class="form-row">
+        <button type="reset">Reset</button>
+        <button type="submit">Create</button>
+      </div>
+    </form>
+  </section>
+
+  <aside class="panel">
+    <h2>Filter Rooms</h2>
+    <form id="filter-form">
+      <input type="text" name="q" placeholder="Search host…">
+      <select name="size">
+        <option value="">Any size</option>
+        <option value="7x6">7 x 6</option>
+        <option value="8x7">8 x 7</option>
+      </select>
+      <select name="ranked">
+        <option value="">Any mode</option>
+        <option value="true">Ranked</option>
+        <option value="false">Casual</option>
+      </select>
+      <label><input type="checkbox" name="openOnly" checked> Open only</label>
+    </form>
+  </aside>
+
+  <section class="panel">
+    <h2>Rooms</h2>
+    <ul id="rooms-list" class="rooms"></ul>
+  </section>
+</main>
+<footer id="site-footer"></footer>
+</body>
 </html>
