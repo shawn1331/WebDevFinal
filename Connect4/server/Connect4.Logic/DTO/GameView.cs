@@ -1,5 +1,6 @@
 using Connect4.Logic.Domain;
 namespace Connect4.Logic.DTO;
+
 public class GameView
 {
     public string Id { get; init; } = "";
@@ -12,6 +13,7 @@ public class GameView
     public Cell[] WinLine { get; init; } = Array.Empty<Cell>();
     public string? P1 { get; init; }
     public string? P2 { get; init; }
+    public int Me { get; set; }
 
     public static GameView From(Game game)
     {
@@ -20,7 +22,8 @@ public class GameView
         for (int r = 0; r < game.Board.Rows; r++)
         {
             jagged[r] = new int[game.Board.Columns];
-            for (int c = 0; c < game.Board.Columns; c++) jagged[r][c] = snap[r, c];
+            for (int c = 0; c < game.Board.Columns; c++)
+                jagged[r][c] = snap[r, c];
         }
         return new GameView
         {

@@ -16,8 +16,6 @@ public class Board
         _grid = new int[Rows, Columns];
     }
 
-    public int board[int r, int c] => _grid[r, c]; // TODO: fix syntax
-
     public bool IsColumnFull(int col) => _grid[0, col] != 0;
 
     public int? FindDropRow(int col)

@@ -32,29 +32,34 @@ public class GameService
 
     public GameView GetState(string gameId, string token)
     {
-        var g = _repo.Get(gameId) ?? throw new InvalidOperationException("Game not found.");
-        EnsurePlayerToken(g, token);
-        return GameView.From(g);
+        var game = _repo.Get(gameId) ?? throw new InvalidOperationException("Game not found.");
+        var who = EnsurePlayerToken(game, token);
+        var view = GameView.From(game);
+        view.Me = who;
+        return view;
     }
 
     public GameView ApplyMove(string gameId, string token, int column)
     {
-        var g = _repo.Get(gameId) ?? throw new InvalidOperationException("Game not found.");
-        var who = EnsurePlayerToken(g, token);
+        var game = _repo.Get(gameId) ?? throw new InvalidOperationException("Game not found.");
+        var who = EnsurePlayerToken(game, token);
 
-        MovePolicy.EnsureCanMove(g, who, column);
 
-        var row = g.Board.FindDropRow(column) ?? throw new ColumnFullException();
-        g.Board.PlaceAt(row, column, who);
+        MovePolicy.EnsureCanMove(game, who, column);
 
-        var snap = g.Board.Snapshot();
-        (bool isWin, Cell[] line) = WinChecker.Check(snap, g.Board.Rows, g.Board.Columns, row, column, who);
-        if (isWin) g.SetWin(who, line);
-        else if (g.Board.IsTopRowFilledEverywhere()) g.SetDraw();
-        else g.NextTurn();
+        var row = game.Board.FindDropRow(column) ?? throw new ColumnFullException();
+        game.Board.PlaceAt(row, column, who);
 
-        _repo.Save(g);
-        return GameView.From(g);
+        var snap = game.Board.Snapshot();
+        (bool isWin, Cell[] line) = WinChecker.Check(snap, game.Board.Rows, game.Board.Columns, row, column, who);
+        if (isWin) game.SetWin(who, line);
+        else if (game.Board.IsTopRowFilledEverywhere()) game.SetDraw();
+        else game.NextTurn();
+
+        _repo.Save(game);
+        var view = GameView.From(game);
+        view.Me = who;
+        return view;
     }
 
     private static int EnsurePlayerToken(Game g, string token)
