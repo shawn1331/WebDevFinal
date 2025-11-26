@@ -84,7 +84,9 @@ app.MapPost("/api/games/{gameId}/move", (string gameId, MoveDto dto, GameService
         catch (ColumnFullException ex) { return Results.BadRequest(new { error = ex.Message }); }
         catch (GameFinishedException ex) { return Results.BadRequest(new { error = ex.Message }); }
         catch (InvalidMoveException ex) { return Results.BadRequest(new { error = ex.Message }); }
+        catch (GameNotStartedException ex) { return Results.BadRequest(new { error = ex.Message }); }
         catch (Exception ex) { return Results.BadRequest(new { error = ex.Message }); }
+
     }
 });
 

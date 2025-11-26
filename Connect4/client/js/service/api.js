@@ -1,4 +1,4 @@
-const DEFAULT_BASE = localStorage.getItem("apiBase") || "http://localhost:5000";
+const DEFAULT_BASE = localStorage.getItem("apiBase") || "http://localhost:5048";
 
 export const BASE_URL = DEFAULT_BASE;
 

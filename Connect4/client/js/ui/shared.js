@@ -19,4 +19,24 @@ export function mountShell() {
   footerText.textContent = `\u00A9 ${new Date().getFullYear()} Connect4`;
   footer.appendChild(footerText);
 }
+
+const ERROR_BAR_ID = 'error-bar';
+
+export function showError(message) {
+  const bar = document.getElementById(ERROR_BAR_ID);
+  if (!bar) return;
+  bar.textContent = message || '';
+  if (message) {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+export function clearError() {
+  showError('');
+}
+
+
+
 mountShell();

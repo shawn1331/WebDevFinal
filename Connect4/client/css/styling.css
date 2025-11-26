@@ -185,6 +185,21 @@ button:hover {
   outline-offset: 2px;
 }
 
+.error-banner {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  background: #4b1111;
+  color: #ffdede;
+  font-size: 0.9rem;
+  display: none; /* hidden until we have an error */
+}
+
+.error-banner.visible {
+  display: block;
+}
+
+
 @media (max-width: 900px) {
   .container {
     grid-template-columns: 1fr;

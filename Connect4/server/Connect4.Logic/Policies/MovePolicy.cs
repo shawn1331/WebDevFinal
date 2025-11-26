@@ -6,7 +6,9 @@ public static class MovePolicy
 {
     public static void EnsureCanMove(Game game, int who, int column)
     {
-        if (game.Status != GameStatus.Live)
+        if (game.Status == GameStatus.Waiting)
+            throw new GameNotStartedException();
+        if (game.Status == GameStatus.Finished)
             throw new GameFinishedException();
         if (who != game.Turn)
             throw new NotYourTurnException();
