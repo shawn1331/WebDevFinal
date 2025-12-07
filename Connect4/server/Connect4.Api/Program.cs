@@ -7,8 +7,9 @@ using Connect4.Logic.Errors;
 using Connect4.Logic.Policies;
 using Connect4.Logic.Service;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Connect4.Api.Services;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ var gameLocks = new ConcurrentDictionary<string, object>();
 // In-memory repo
 builder.Services.AddSingleton<IGameRepository>(sp => new InMemoryRepo(games));
 builder.Services.AddSingleton<GameService>();
+builder.Services.AddSingleton<IStatStore, FileStatStore>();
+
 
 var app = builder.Build();
 app.UseCors();
@@ -45,7 +48,7 @@ app.MapPost("/api/rooms", (CreateRoomDto dto, GameService engine) =>
 
     var view = engine.CreateGame(gameId, dto.Size, host);
 
-    var rv = new RoomView(roomId, dto.RoomName, dto.Size, dto.Ranked, dto.TimerSec, true, gameId, dto.HostName);
+    var rv = new RoomView(roomId, dto.RoomName, dto.Size, dto.Ranked, dto.TimerSec, true, gameId, dto.HostName, null);
     rooms[roomId] = rv;
     gameLocks[gameId] = new object();
 
@@ -61,7 +64,7 @@ app.MapPost("/api/rooms/{roomId}/join", (string roomId, JoinDto dto, GameService
     var guest = new Player(Guid.NewGuid().ToString("N"), dto.PlayerName, Guid.NewGuid().ToString("N"), 2);
     var view = engine.JoinGame(room.GameId, guest);
 
-    rooms[roomId] = room with { Open = false };
+    rooms[roomId] = room with { Open = false, GuestName = dto.PlayerName };
     return Results.Json(new JoinResult(room.GameId, guest.Token));
 });
 
@@ -73,13 +76,26 @@ app.MapGet("/api/games/{gameId}/state", (string gameId, string token, GameServic
 });
 
 // Make move (authoritative)
-app.MapPost("/api/games/{gameId}/move", (string gameId, MoveDto dto, GameService engine) =>
+app.MapPost("/api/games/{gameId}/move", (string gameId, MoveDto dto, GameService engine, IStatStore statsStore) =>
 {
     if (!gameLocks.TryGetValue(gameId, out var gate)) return Results.NotFound(new { error = "Game not found." });
 
     lock (gate)
     {
-        try { return Results.Json(engine.ApplyMove(gameId, dto.Token, dto.Column)); }
+        try
+        {
+            var view = engine.ApplyMove(gameId, dto.Token, dto.Column);
+
+            if (view.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase))
+            {
+                var room = rooms.Values.FirstOrDefault(r => r.GameId == gameId);
+                if (room is not null)
+                {
+                    statsStore.RecordGame(room.HostName, room.GuestName, view.Winner);
+                }
+            }
+            return Results.Json(view);
+        }
         catch (NotYourTurnException ex) { return Results.BadRequest(new { error = ex.Message }); }
         catch (ColumnFullException ex) { return Results.BadRequest(new { error = ex.Message }); }
         catch (GameFinishedException ex) { return Results.BadRequest(new { error = ex.Message }); }
@@ -93,12 +109,12 @@ app.MapPost("/api/games/{gameId}/move", (string gameId, MoveDto dto, GameService
 app.Run();
 
 // ===== In-memory repository implementation =====
- class InMemoryRepo : IGameRepository
+class InMemoryRepo : IGameRepository
 {
     private readonly ConcurrentDictionary<string, Game> _store;
     public InMemoryRepo(ConcurrentDictionary<string, Game> store) => _store = store;
 
-    public Game? Get(string gameId) => _store.TryGetValue(gameId, out var g) ? g : null;
+    public Game? Get(string gameId) => _store.TryGetValue(gameId, out var game) ? game : null;
     public void Save(Game game) => _store[game.Id] = game;
     public void Add(Game game) => _store[game.Id] = game;
 }
