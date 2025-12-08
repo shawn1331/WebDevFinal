@@ -33,11 +33,13 @@ function renderRooms(items) {
       link.addEventListener("click", async (e) => {
         e.preventDefault();
         const displayName = prompt("Your display name?") || "Guest";
+        setProfileName(displayName);
+
         try {
           const res = await joinRoom(id, displayName);
           if (res.error) {
             showError(res.error);
-            return; 
+            return;
           }
           // res.gameId & res.guestToken from API
           location.href = `play.html?gameId=${
@@ -108,6 +110,9 @@ createForm.addEventListener("submit", async (e) => {
     timerSec: Number(fd.get("timerSec") || 0),
     ranked: fd.get("ranked") === "true",
   };
+  if (hostName) {
+    setProfileName(hostName);
+  }
 
   try {
     const res = await createRoom(payload);

@@ -44,3 +44,11 @@ export async function postMove(gameId, token, column) {
 export function QueryString() {
   return new URLSearchParams(location.search);
 }
+
+export async function getProfile(name) {
+  const res = await fetch(`${BASE_URL}/api/profile/${encodeURIComponent(name)}`);
+  if (!res.ok) {
+    throw new Error('Failed to load profile');
+  }
+  return await res.json();
+}
