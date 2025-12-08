@@ -12,12 +12,14 @@ const movesEl = document.getElementById("moves");
 const refreshBtn = document.getElementById("refresh");
 const trayEl = document.getElementById("tray");
 
-let rows = 0; // set from server (view.rows)
-let cols = 0; // set from server (view.cols)
-let me = 1; // my player number (view.me)
-let lastTurn = 1; // whose turn it is (view.turn)
-let busy = false; // prevent double moves
-let dragCol = null; // column hovered during drag
+let rows = 0;           // set from server (view.rows)
+let cols = 0;           // set from server (view.cols)
+let me = 1;             // my player number (view.me)
+let currentTurn = 1;    // whose turn it is (view.turn)
+let currentStatus = ""; // "Waiting", "Live", "Finished"
+let busy = false;       // prevent double moves
+let dragCol = null;     // column hovered during drag
+let currentView = null; // latest view from server
 
 // ---------- Helpers ----------
 
@@ -34,7 +36,6 @@ function renderBoard(board, winLine = []) {
     return;
   }
 
-  // If rows/cols not set yet, infer from board shape
   if (!rows || !cols) {
     const inferredRows = board.length;
     const inferredCols = board[0]?.length ?? 0;
@@ -52,7 +53,7 @@ function renderBoard(board, winLine = []) {
     for (let c = 0; c < cols; c++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      cell.dataset.col = String(c); // OPTION A: column encoded here
+      cell.dataset.col = String(c); 
 
       const val = row[c] ?? 0;
       if (val) cell.classList.add(`is-p${val}`);
@@ -64,26 +65,32 @@ function renderBoard(board, winLine = []) {
 }
 
 function setStatus(view) {
-  if (view.status === "Waiting" || view.status === "waiting") {
+  const status = (view.status || "").toLowerCase();
+
+  if (status === "waiting") {
     statusEl.textContent = "Waiting for an opponent to join…";
     return;
   }
-  if (view.status === "Finished" || view.status === "finished") {
+
+  if (status === "finished") {
     if (view.winner === 0) {
       statusEl.textContent = "Draw!";
     } else if (view.winner === me) {
       statusEl.textContent = "You win! 🎉";
     } else {
-      statusEl.textContent = `Player ${view.winner} wins.`;
+      statusEl.textContent = "You lose.";
     }
+    return;
+  }
+
+  if (view.turn === me) {
+    statusEl.textContent = "Your turn";
   } else {
-    statusEl.textContent =
-      view.turn === me ? "Your turn" : `Opponent’s turn (Player ${view.turn})`;
+    statusEl.textContent = `Opponent’s turn (Player ${view.turn})`;
   }
 }
 
 function appendMoveLog(nextTurn, colPlayed) {
-  // nextTurn is who goes *next*, so the one who just played is the other one
   const whoPlayed = nextTurn === 1 ? 2 : 1;
   const li = document.createElement("li");
   li.textContent = `P${whoPlayed} → Col ${colPlayed + 1}`;
@@ -107,28 +114,34 @@ function computeRemaining(board, player, r, c) {
   return Math.max(0, totalMyChips - placed);
 }
 
-function renderTray(board) {
+function renderTray(view) {
   trayEl.replaceChildren();
 
+  const board = view?.board;
   if (!Array.isArray(board) || !board.length || !rows || !cols) {
     trayEl.setAttribute("aria-label", "Your pieces");
     return;
   }
 
   const remaining = computeRemaining(board, me, rows, cols);
+  const status = (view.status || "").toLowerCase();
+  const isMyTurn = status === "live" && view.turn === me && view.winner === 0;
 
   for (let i = 0; i < remaining; i++) {
     const chip = document.createElement("div");
     chip.className = `chip p${me}`;
-    chip.draggable = true;
-    chip.addEventListener("dragstart", onDragStart);
+    if (isMyTurn) {
+      chip.draggable = true;
+      chip.addEventListener("dragstart", onDragStart);
+    } else {
+      chip.draggable = false;
+    }
     trayEl.appendChild(chip);
   }
 
   trayEl.setAttribute("aria-label", `Your pieces (${remaining} available)`);
 }
 
-// ---------- Column highlighting for drag ----------
 
 function highlightColumn(col) {
   boardEl
@@ -146,19 +159,16 @@ function clearHighlight() {
   highlightColumn(null);
 }
 
-// ---------- Drag & Drop handlers ----------
 
 function onDragStart(e) {
-  // Mark payload so we only accept drops from our chips
   e.dataTransfer.setData("text/connect4-chip", "1");
   e.dataTransfer.effectAllowed = "copy";
 }
 
-// Board dragover: track which column we're over, and highlight it
 boardEl.addEventListener("dragover", (e) => {
   if (!e.dataTransfer.types.includes("text/connect4-chip")) return;
 
-  e.preventDefault(); // allow drop
+  e.preventDefault(); 
 
   const cell = e.target.closest(".cell");
   if (!cell) return;
@@ -172,7 +182,6 @@ boardEl.addEventListener("dragover", (e) => {
   }
 });
 
-// When drag leaves the entire board, clear highlight
 boardEl.addEventListener("dragleave", (e) => {
   const related = e.relatedTarget;
   if (!related || !boardEl.contains(related)) {
@@ -180,7 +189,6 @@ boardEl.addEventListener("dragleave", (e) => {
   }
 });
 
-// Drop: use the column of the closest cell (or last hovered col)
 boardEl.addEventListener("drop", async (e) => {
   if (!e.dataTransfer.types.includes("text/connect4-chip")) return;
 
@@ -195,7 +203,6 @@ boardEl.addEventListener("drop", async (e) => {
   await tryMove(col, true);
 });
 
-// ---------- Click-to-move fallback ----------
 
 boardEl.addEventListener("click", async (e) => {
   const cell = e.target.closest(".cell");
@@ -206,7 +213,6 @@ boardEl.addEventListener("click", async (e) => {
   await tryMove(col, false);
 });
 
-// ---------- Core move handler (shared by drag & click) ----------
 
 async function tryMove(col, cameFromDrag) {
   if (!gameId || !token) {
@@ -216,8 +222,19 @@ async function tryMove(col, cameFromDrag) {
 
   if (busy) return;
 
-  // Block if it’s not my turn — server-authoritative turn info
-  if (lastTurn !== me) {
+  const status = (currentStatus || "").toLowerCase();
+  if (status !== "live") {
+    if (status === "waiting") {
+      showError("Game has not started yet. Wait for an opponent to join.");
+    } else if (status === "finished") {
+      showError("The game is already finished.");
+    } else {
+      showError("Game is not in a playable state.");
+    }
+    return;
+  }
+
+  if (currentTurn !== me) {
     showError("It's not your turn yet.");
     return;
   }
@@ -231,10 +248,9 @@ async function tryMove(col, cameFromDrag) {
       return;
     }
 
-    showError('');
+    showError("");
     updateFromView(res);
 
-    // Optional: immediate visual feedback for drag
     if (cameFromDrag && trayEl.firstChild) {
       trayEl.removeChild(trayEl.firstChild);
     }
@@ -245,31 +261,37 @@ async function tryMove(col, cameFromDrag) {
   }
 }
 
-// ---------- State loading & syncing (server-authoritative) ----------
 
 function updateFromView(view) {
   if (!view) return;
-
+  currentView = view;
 
   // Who am I? (server provides me)
   if (typeof view.me === "number") {
     me = view.me;
   }
 
-  // Board size from server (camelCase)
   if (typeof view.cols === "number" && typeof view.rows === "number") {
     setBoardSize(view.cols, view.rows);
   } else if (Array.isArray(view.board) && view.board.length) {
-    // Fallback: infer from board shape
     const inferredRows = view.board.length;
     const inferredCols = view.board[0]?.length ?? 0;
     if (inferredRows && inferredCols) setBoardSize(inferredCols, inferredRows);
   }
 
+  currentTurn = view.turn;
+  currentStatus = view.status || "";
+
   renderBoard(view.board, view.winLine || []);
-  renderTray(view.board);
+  renderTray(view);
   setStatus(view);
-  lastTurn = view.turn; 
+
+  console.log("State:", {
+    me,
+    turn: currentTurn,
+    status: currentStatus,
+    winner: view.winner,
+  });
 }
 
 async function loadState() {
@@ -278,20 +300,29 @@ async function loadState() {
     return;
   }
 
-  const view = await getState(gameId, token);
-  console.log(view);
+  try {
+    console.log("Polling state...");
+    const view = await getState(gameId, token);
+    if (view.error) {
+      showError(view.error);
+      return;
+    }
 
-  if (view.error) {
-    showError(view.error);
-    return;
+    showError("");
+    updateFromView(view);
+  } catch (err) {
+    console.error("Failed to load state", err);
+    showError(err.message || "Unable to load game state.");
   }
-
-  showError('');
-  updateFromView(view);
 }
 
+refreshBtn.addEventListener("click", () => {
+  void loadState();
+});
 
-refreshBtn.addEventListener("click", loadState);
+setInterval(() => {
+  void loadState();
+}, 1500);
 
 fetchRandomAvatar()
   .then(({ url, name }) => {
@@ -304,6 +335,5 @@ fetchRandomAvatar()
     const cap = document.getElementById("avatar-cap");
     if (cap) cap.textContent = "Opponent";
   });
-
 
 loadState();
