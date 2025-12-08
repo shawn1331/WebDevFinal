@@ -1,6 +1,6 @@
 const DEFAULT_BASE = localStorage.getItem("apiBase") || "http://localhost:5048";
 
-export const BASE_URL = DEFAULT_BASE;
+export const BASE_URL = "https://connect4-api-7zvm.onrender.com"; //|| DEFAULT_BASE;
 
 export async function listRooms() {
   const response = await fetch(`${BASE_URL}/api/rooms`);
@@ -13,7 +13,21 @@ export async function createRoom(payload) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  return response.json();
+  if (!response.ok) {
+    let message = "Failed to create room";
+    try {
+      const problem = await res.json();
+      if (problem && problem.error) {
+        message = problem.error;
+      }
+    } catch {
+    }
+    throw new Error(message);
+  }
+
+  const data = await response.json();
+  console.log("createRoom response", data);
+  return data;
 }
 
 export async function joinRoom(roomId, name) {
@@ -46,9 +60,11 @@ export function QueryString() {
 }
 
 export async function getProfile(name) {
-  const res = await fetch(`${BASE_URL}/api/profile/${encodeURIComponent(name)}`);
+  const res = await fetch(
+    `${BASE_URL}/api/profile/${encodeURIComponent(name)}`
+  );
   if (!res.ok) {
-    throw new Error('Failed to load profile');
+    throw new Error("Failed to load profile");
   }
   return await res.json();
 }

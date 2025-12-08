@@ -1,6 +1,6 @@
 import { createRoom, listRooms, joinRoom } from "../service/api.js";
 import { showError } from "./shared.js";
-import { setProfileName } from "../svc/profileStore.js";
+import { setProfileName } from "../service/profileStore.js";
 
 const createForm = document.getElementById("create-form");
 const filterForm = document.getElementById("filter-form");
@@ -102,6 +102,7 @@ async function refresh() {
 createForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const fd = new FormData(createForm);
+  const hostName = fd.get("hostName");
 
   const payload = {
     hostName: fd.get("hostName"),
@@ -110,6 +111,9 @@ createForm.addEventListener("submit", async (e) => {
     timerSec: Number(fd.get("timerSec") || 0),
     ranked: fd.get("ranked") === "true",
   };
+
+  console.log("Create room payload", payload);
+
   if (hostName) {
     setProfileName(hostName);
   }
